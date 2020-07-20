@@ -46,5 +46,5 @@ if(guild.systemChannel){ // Checking if it's not null
 	guild.systemChannel.send(memberTag + " has joined!");
 	}	
 member.send("Hello there, welcome to the Axios Server.\nPlease answer the questions to proceed.");
-member.send("Tell me your First name after writing X! \n(Ex:X! cname your_name)");
+member.send("Tell me your First name after writing X! cname \n(Ex:X! cname your_name)");
 });
