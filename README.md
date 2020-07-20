@@ -1,2 +1,2 @@
 # discordbot
-advanced discord bot for managing different servers
+A discord bot for the Axios Server.

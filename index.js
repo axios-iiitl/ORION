@@ -3,24 +3,34 @@ const client = new Discord.Client();
 
 client.login("NzM0NDkwMTA2NTYzNjU3ODA4.XxSdPg.OQrPZ6WJutGwc8AJWwlmCJ2SciU");
 
-let ID='734492621950419025';
+let ID='733628966665191546';                                   //Guild id axios:733628966665191546 ; guild id cirius:734492621950419025
+
 console.log(ID);
 client.on("message", (message) => {
 if(message.content == "Hello"){ 
                 name=message.member.user.tag;
-		message.channel.send("Hello "+name+":wave:");
+	        message.channel.send("Hello "+name+":wave:");
+		console.log(message.guild.id);
+		message.channel.send("GuildID sent");
 		 
 }
-let prefix="new";
-if(message.guild == null && message.content.startsWith(prefix)) {
-const args = message.content.slice(prefix.length).trim().split(' ');
-let name = args[0];
-console.log(name);
-if( name == "narendra" || name == "Narendra") {
-        client.guilds.cache.get(ID).members.cache.get(message.author.id).roles.add('734507706626474094'); 	
+let prefix="X!";
+let prefix2="cname"
+if(message.guild == null && message.content.startsWith(prefix)) {                                              //get the private message nad checck for prefix
+const args = message.content.slice(prefix.length).trim().split(' ');                                           //extract words from the sentence provided
+let input = args[0];
+if(input == prefix2){  										             //check whether to change the name 
+    change=args[1];
+    client.guilds.cache.get(ID).members.cache.get(message.author.id).setNickname(change);
+    }                                                                                                     
+console.log(input);
+if( input == "2019" ){
+        client.guilds.cache.get(ID).members.cache.get(message.author.id).roles.add('734681077549105233');
+        message.author.send("Role Assigned"); 	
 }
-if( name == "Charan" || name == "charan") {
-        client.guilds.cache.get(ID).members.cache.get(message.author.id).roles.add('734507914630266890'); 	
+else if( input == "2018") {
+        client.guilds.cache.get(ID).members.cache.get(message.author.id).roles.add('734681070506868736');
+        message.author.send("Role Assigned"); 	
 }
 }	
 let {guild} = message;
@@ -33,6 +43,6 @@ let memberTag = member.user.tag; // GuildMembers don't have a tag property, read
 if(guild.systemChannel){ // Checking if it's not null
 	guild.systemChannel.send(memberTag + " has joined!");
 	}	
-member.send("Hello there, please answer the Questions");
-member.send("Tell me your First name after writeing new \n(Ex:new name)");
+member.send("Hello there, welcome to the Axios Server.\nPlease answer the questions to proceed.");
+member.send("Tell me your First name after writing X! \n(Ex:X! cname your_name)\nWhich Batch you belong to:(Ex: X! 2019");
 });
