@@ -15,22 +15,24 @@ if(message.content == "Hello"){
 		 
 }
 let prefix="X!";
-let prefix2="cname"
-if(message.guild == null && message.content.startsWith(prefix)) {                                              //get the private message nad checck for prefix
+if(message.guild == null && message.content.startsWith(prefix)) {                                              //get the private message and checck for prefix
 const args = message.content.slice(prefix.length).trim().split(' ');                                           //extract words from the sentence provided
+console.log(message.content);
 let input = args[0];
-if(input == prefix2){  										             //check whether to change the name 
+if(input == "cname"){  										             //check whether to change the name 
     change=args[1];
     client.guilds.cache.get(ID).members.cache.get(message.author.id).setNickname(change);
-    }                                                                                                     
-console.log(input);
-if( input == "2019" ){
-        client.guilds.cache.get(ID).members.cache.get(message.author.id).roles.add('734681077549105233');
-        message.author.send("Role Assigned"); 	
-}
-else if( input == "2018") {
+    message.author.send("Which Batch you belong to:(Ex X! year 2019)");
+    }
+if ( input == "year"){                                                                                         //check for year             
+    if( args[1] == "2019" ){
+           client.guilds.cache.get(ID).members.cache.get(message.author.id).roles.add('734681077549105233');
+           message.author.send("Role Assigned"); 	
+    }
+    else if( args[1] == "2018") {
         client.guilds.cache.get(ID).members.cache.get(message.author.id).roles.add('734681070506868736');
         message.author.send("Role Assigned"); 	
+    }
 }
 }	
 let {guild} = message;
@@ -44,5 +46,5 @@ if(guild.systemChannel){ // Checking if it's not null
 	guild.systemChannel.send(memberTag + " has joined!");
 	}	
 member.send("Hello there, welcome to the Axios Server.\nPlease answer the questions to proceed.");
-member.send("Tell me your First name after writing X! \n(Ex:X! cname your_name)\nWhich Batch you belong to:(Ex: X! 2019");
+member.send("Tell me your First name after writing X! \n(Ex:X! cname your_name)");
 });
