@@ -17,7 +17,7 @@ if(message.content.toUpperCase().startsWith(prefix)){                           
            len=args.length;
            const chnl = client.guilds.cache.get(ID).channels.cache.find(channel => channel.name === args[1].toLowerCase()+"-2020")
            post=args.slice(2,len+1).join(" ");
-           chnl.send(post+"[<@"+message.member.user.id+"> from <#"+message.channel.id+">]");
+           chnl.send(post+"\n[<@"+message.member.user.id+"> from <#"+message.channel.id+">]");
            message.channel.send("Sent!");
 	   }
        if(input.toLowerCase()=="list"){
