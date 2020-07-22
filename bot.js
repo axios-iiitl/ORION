@@ -31,7 +31,7 @@ if(message.content.toUpperCase().startsWith(prefix)){                           
        if(input.toLowerCase()=="help"){
            message.channel.send("Every command must be started with :point_right: **X!** :point_left:.\nThese commands can be used:")
            message.channel.send("```bash\n'X! send channel_name message'\n```   =>This command can be used to send message to the channel which you are not currently part of.**For Ex:X! send web-dev your_text**.\nChannels in which you can send message with this: competitive-programming, android-development ,cyber-security ,design ,machine-learning ,web-dev ,team-eduthon")
-           message.channel.send("```bash\n'X! set name github_userID twitter_username codeforces_username codechef_username'\n```    =>This command sets your information in the database.If you don't have a username for a site then use **NA** at that place.**Github Username is must**")
+           message.channel.send("```bash\n'X! set your_name github_userID twitter_username codeforces_username codechef_username'\n```    =>This command sets your information in the database.If you don't have a username for a site then use **NA** at that place.**Github Username is must**")
            message.channel.send("```bash\n'X! update website_name new_website_username'\n```    => This command modifies the existing values in the database.\nFor Ex: To change username of twitter \nX! update twitter new_twitter_username")
            message.channel.send("```bash\n'X! info @username'\n```    => This will give the information about the member.")
            message.channel.send("```bash\n'X! help'\n```   =>To open this help dialog")
@@ -121,7 +121,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
         const collection = await db.collection('Members_Data');
         if(query1=='set'){
              console.log(query1,query2,query3,query4,query5,query6,query7);           
-             await collection.insertOne({name: query2,github_username: query3,twitter_username: query4, codechef_username: query5, codeforces_username: query6, DID: query7}); 
+             await collection.insertOne({name: query2,github_username: query3,twitter_username: query4, codeforces_username: query5, codechef_username: query6, DID: query7}); 
              message.channel.send("Added!");
              //await listDatabases(client);
           } 
