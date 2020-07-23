@@ -10,8 +10,15 @@ let ID='733628966665191546';                                   //Guild id axios:
 console.log("Starting");
 let prefix="X!";
 console.log(ID);
+client.on("ready", () =>{
+    console.log(`Logged in as ${client.user.tag}!`);
+    client.user.setActivity("X! help", {
+    type: "LISTENING",
+    url: "https://www.fake.tt/"
+});
+});
 client.on("message", async message => {
-if(message.content.toUpperCase().startsWith(prefix)){                                                //check for prefix
+if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "dm"){                                                //check for prefix
        console.log(message.content);
        const args = message.content.slice(prefix.length).trim().split(' ');                          //remove prefix and make array of rest words in message
        let input = args[0];
@@ -31,7 +38,7 @@ if(message.content.toUpperCase().startsWith(prefix)){                           
        if(input.toLowerCase()=="help"){
            message.channel.send("Every command must be started with :point_right: **X!** :point_left:.\nThese commands can be used:")
            message.channel.send("```bash\n'X! send channel_name message'\n```   =>This command can be used to send message to the channel which you are not currently part of.**For Ex:X! send web-dev your_text**.\nChannels in which you can send message with this: competitive-programming, android-development ,cyber-security ,design ,machine-learning ,web-dev ,team-eduthon")
-           message.channel.send("```bash\n'X! set your_name github_userID twitter_username codeforces_username codechef_username'\n```    =>This command sets your information in the database.If you don't have a username for a site then use **NA** at that place.**Github Username is must**")
+           message.channel.send("```bash\n'X! set github_userID twitter_username codeforces_username codechef_username'\n```    =>This command sets your information in the database.If you don't have a username for a site then use **NA** at that place.")
            message.channel.send("```bash\n'X! update website_name new_website_username'\n```    => This command modifies the existing values in the database.\nFor Ex: To change username of twitter \nX! update twitter new_twitter_username")
            message.channel.send("```bash\n'X! info @username'\n```    => This will give the information about the member.")
            message.channel.send("```bash\n'X! help'\n```   =>To open this help dialog")
@@ -62,7 +69,7 @@ if(message.content.toUpperCase().startsWith(prefix)){                           
           //  message.channel.send("Wrong ID");
           // }
           else{
-            await database(message,"set",args[1],args[2],args[3],args[4],args[5],message.author.tag.split('#')[1]); 
+            await database(message,"set",message.member.user.tag.split('#')[0],args[1],args[2],args[3],args[4],message.author.tag.split('#')[1]); 
            } 
         }
        if(input.toLowerCase()=="info"){
@@ -93,7 +100,12 @@ if ( input.toLowerCase() == "year"){                                            
         client.guilds.cache.get(ID).members.cache.get(message.author.id).roles.add('734681070506868736');
         message.author.send("Role Assigned"); 	
     }
+    message.author.send("Please give some information about you.Ex: ***X! set github_userID twitter_username codeforces_username codechef_username*** \n If you don't have account on a website, then use NA at that place");
 }
+if (input.toLowerCase() == "set") {
+    await database(message,"set",client.guilds.cache.get(ID).members.cache.get(message.author.id).nickname,args[1],args[2],args[3],args[4],message.author.tag.split('#')[1]);
+    message.author.send("You are all done.Hop on to the Server!");
+    } 
 }	
 let {guild} = message;
 console.log(guild ? `New message in ${guild.name}` : "New private message");
