@@ -5,7 +5,7 @@ const client = new Discord.Client();
 
 client.login("NzM0NDkwMTA2NTYzNjU3ODA4.XxSdPg.OQrPZ6WJutGwc8AJWwlmCJ2SciU");
 
-let ID='734492621950419025';                                   //Guild id axios:733628966665191546 ; guild id cirius:734492621950419025
+let ID='733628966665191546';                                   //Guild id axios:733628966665191546 ; guild id cirius:734492621950419025
 
 console.log("Starting");
 let prefix="X!";
