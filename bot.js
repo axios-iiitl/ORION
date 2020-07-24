@@ -5,7 +5,7 @@ const client = new Discord.Client();
 
 client.login("NzM0NDkwMTA2NTYzNjU3ODA4.XxSdPg.OQrPZ6WJutGwc8AJWwlmCJ2SciU");
 
-let ID='733628966665191546';                                   //Guild id axios:733628966665191546 ; guild id cirius:734492621950419025
+let ID='734492621950419025';                                   //Guild id axios:733628966665191546 ; guild id cirius:734492621950419025
 
 console.log("Starting");
 let prefix="X!";
@@ -29,13 +29,13 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
            chnl.send(post+"\n[<@"+message.member.user.id+"> from <#"+message.channel.id+">]");
            message.channel.send("Sent!");
 	   }
-       if(input.toLowerCase()=="list"){
+       else if(input.toLowerCase()=="list"){
            const listchannel = []
            client.guilds.cache.get(ID).channels.cache.forEach(channel => listchannel.push(channel.name));
            len=listchannel.length;
            message.channel.send("These are the channels on the server:\n*"+listchannel.slice(3,len+1).join('\n*'));
            }
-       if(input.toLowerCase()=="help"){
+       else if(input.toLowerCase()=="help"){
            message.channel.send("Every command must be started with :point_right: **X!** :point_left:.\nThese commands can be used:")
            message.channel.send("```bash\n'X! send channel_name message'\n```   =>This command can be used to send message to the channel which you are not currently part of.**For Ex:X! send web-dev your_text**.\nChannels in which you can send message with this: competitive-programming, android-development ,cyber-security ,design ,machine-learning ,web-dev ,team-eduthon")
            message.channel.send("```bash\n'X! set github_userID twitter_username codeforces_username codechef_username'\n```    =>This command sets your information in the database.If you don't have a username for a site then use **NA** at that place.")
@@ -43,7 +43,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
            message.channel.send("```bash\n'X! info @username'\n```    => This will give the information about the member.")
            message.channel.send("```bash\n'X! help'\n```   =>To open this help dialog")
            }
-       if(input.toLowerCase()=="update"){                                                                   //ALL About UPDATE
+       else if(input.toLowerCase()=="update"){                                                                   //ALL About UPDATE
            if(args[1].toLowerCase()=="github"){
             await database(message,'github',message.author.tag.split('#')[1],args[2]);
             }
@@ -60,7 +60,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
             message.channel.send("SYNTAX ERROR!\n Please specify the information you want to modify.\n Ex: **X! update twitter new_twitter_username**")
             }
          }
-       if(input.toLowerCase()=="set"){  
+       else if(input.toLowerCase()=="set"){  
           console.log("Reached Inside");                                                                   //Insert Info in database
           if(args[1] == null){
             message.channel.send("SYNTAX ERROR!");
@@ -72,14 +72,17 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
             await database(message,"set",message.member.user.tag.split('#')[0],args[1],args[2],args[3],args[4],message.author.tag.split('#')[1]); 
            } 
         }
-       if(input.toLowerCase()=="info"){
-          UserID = args[1].split('@!')[1].slice(0,-1);
+       else if(input.toLowerCase()=="info"){
+          UserID = args[1].slice(-19,-1);
           console.log(UserID);
           user=client.guilds.cache.get(ID).members.cache.get(UserID);
           DID=user.user.discriminator;
           console.log(DID);
           await database(message,"info",DID)            
         }
+       else{
+        message.channel.send("Didn't found that command!:confused:");
+        } 
 }
 
 if(message.guild == null && message.content.toUpperCase().startsWith(prefix)) {                                              //Check if it is private message and check for prefix
@@ -154,13 +157,18 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
             message.channel.send("Updated!");
           }
         if(query1=='info'){  
-            items=await collection.find({DID: query2}).toArray()
+            items=await collection.find({DID: query2}).toArray() 
+            if(Array.isArray(items) && items.length ){                                                       //Check whether user's info has been fetched.    
             let name=items[0].name;
             let github=items[0].github_username;
             let twitter=items[0].twitter_username;
             let codechef=items[0].codechef_username;
             let codeforces=items[0].codeforces_username;
             message.channel.send("Name: "+name+"\nGithub Username: "+github+"\nTwitter Username: "+twitter+"\nCodechef Username: "+codechef+"\nCodeforces Username: "+codeforces);
+            }
+            else{                                                                               
+                message.channel.send("User's info not in the Database");
+            }
           }  
     } catch (e) {
         console.error(e);
