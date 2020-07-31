@@ -160,10 +160,10 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
             items=await collection.find({DID: query2}).toArray() 
             if(Array.isArray(items) && items.length ){                                                       //Check whether user's info has been fetched.    
             let name=items[0].name;
-            let github=items[0].github_username;
-            let twitter=items[0].twitter_username;
-            let codechef=items[0].codechef_username;
-            let codeforces=items[0].codeforces_username;
+            let github=items[0].github_username.replace(/_/g,'\\_');                                        //escaping text formatiing characters
+            let twitter=items[0].twitter_username.replace(/_/g,'\\_');
+            let codechef=items[0].codechef_username.replace(/_/g,'\\_');
+            let codeforces=items[0].codeforces_username.replace(/_/g,'\\_');
             message.channel.send("Name: "+name+"\nGithub Username: "+github+"\nTwitter Username: "+twitter+"\nCodechef Username: "+codechef+"\nCodeforces Username: "+codeforces);
             }
             else{                                                                               
