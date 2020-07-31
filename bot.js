@@ -107,7 +107,7 @@ if ( input.toLowerCase() == "year"){                                            
 }
 if (input.toLowerCase() == "set") {
     await database(message,"set",client.guilds.cache.get(ID).members.cache.get(message.author.id).nickname,args[1],args[2],args[3],args[4],message.author.tag.split('#')[1]);
-    message.author.send("You are all done.Hop on to the Server!");
+    message.author.send("You are all done.Hop on to the Server and visit the info channel for all the information and rules of the server.");
     } 
 }	
 let {guild} = message;
