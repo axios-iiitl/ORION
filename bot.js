@@ -38,7 +38,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
        else if(input.toLowerCase()=="help"){
            message.channel.send("Every command must be started with :point_right: **X!** :point_left:.\nThese commands can be used:")
            message.channel.send("```bash\n'X! send channel_name message'\n```   =>This command can be used to send message to the channel which you are not currently part of.**For Ex:X! send web-dev your_text**.\nChannels in which you can send message with this: competitive-programming, android-development ,cyber-security ,design ,machine-learning ,web-dev ,team-eduthon")
-           message.channel.send("```bash\n'X! set github_userID twitter_username codeforces_username codechef_username'\n```    =>This command sets your information in the database.If you don't have a username for a site then use **NA** at that place.")
+           message.channel.send("```bash\n'X! set gh:github_userID tw:twitter_username cf:codeforces_username cc:codechef_username'\n```    =>This command sets your information in the database.If you don't have a username for a site then use **NA** at that place.\nEx:X! set cf:NA tw:twitt gh:NA cc:code")
            message.channel.send("```bash\n'X! update website_name new_website_username'\n```    => This command modifies the existing values in the database.\nFor Ex: To change username of twitter \nX! update twitter new_twitter_username")
            message.channel.send("```bash\n'X! info @username'\n```    => This will give the information about the member.")
            message.channel.send("```bash\n'X! help'\n```   =>To open this help dialog")
@@ -69,8 +69,23 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
           //  message.channel.send("Wrong ID");
           // }
           else{
-            await database(message,"set",message.member.user.tag.split('#')[0],args[1],args[2],args[3],args[4],message.author.tag.split('#')[1]); 
-           } 
+            let gh,tw,cc,cf;
+            for(i=1;i<=4;i++){                                                                               //for loop to sort values to be send
+               if(args[i].split(':')[0] == "gh"){
+                   gh=args[i].split(':')[1];
+                   }
+               else if(args[i].split(':')[0] == 'tw'){
+                   tw=args[i].split(':')[1];
+                   }
+               else if(args[i].split(':')[0] == 'cf'){
+                   cf=args[i].split(':')[1];
+                   }
+               else if(args[i].split(':')[0] == 'cc'){
+                   cc=args[i].split(':')[1];
+                   }
+               }                    
+            await database(message,"set",message.member.user.tag.split('#')[0],gh,tw,cf,cc,message.author.tag.split('#')[1]); 
+         } 
         }
        else if(input.toLowerCase()=="info"){
           UserID = args[1].slice(-19,-1);
@@ -85,6 +100,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
         } 
 }
 
+/////////RELATED TO DM////////////////
 if(message.guild == null && message.content.toUpperCase().startsWith(prefix)) {                                              //Check if it is private message and check for prefix
 const args = message.content.slice(prefix.length).trim().split(' ');                                           //extract words from the sentence provided
 console.log(message.content);
@@ -94,7 +110,7 @@ if(input.toLowerCase() == "cname"){  										             //check whether to c
     client.guilds.cache.get(ID).members.cache.get(message.author.id).setNickname(change);
     message.author.send("Which Batch you belong to:(Ex X! year 2019)");
     }
-if ( input.toLowerCase() == "year"){                                                                                         //check for year             
+else if ( input.toLowerCase() == "year"){                                                                                         //check for year             
     if( args[1] == "2019" ){
            client.guilds.cache.get(ID).members.cache.get(message.author.id).roles.add('734681077549105233');
            message.author.send("Role Assigned"); 	
@@ -103,13 +119,17 @@ if ( input.toLowerCase() == "year"){                                            
         client.guilds.cache.get(ID).members.cache.get(message.author.id).roles.add('734681070506868736');
         message.author.send("Role Assigned"); 	
     }
-    message.author.send("Please give some information about you.Ex: ***X! set github_userID twitter_username codeforces_username codechef_username*** \n If you don't have account on a website, then use NA at that place");
+    message.author.send("Please give some information about you.Ex: ***X! set gh:github_userID tw:twitter_username cf:codeforces_username cc:codechef_username*** \n If you don't have account on a website, then use NA at that place.\nFor Ex: if you don't have twitter account then your input would look like\n`X! set gh:your_github_username tw:NA cf:codeforces_username cc:codechef_username`");
 }
-if (input.toLowerCase() == "set") {
+else if (input.toLowerCase() == "set") {
     await database(message,"set",client.guilds.cache.get(ID).members.cache.get(message.author.id).nickname,args[1],args[2],args[3],args[4],message.author.tag.split('#')[1]);
     message.author.send("You are all done.Hop on to the Server and visit the info channel for all the information and rules of the server.");
-    } 
-}	
+    }
+else{
+    message.author.send("SYNTAX ERROR!");
+    }     
+}
+/////NEW USER THINGS///////	
 let {guild} = message;
 console.log(guild ? `New message in ${guild.name}` : "New private message");
 });
@@ -124,6 +144,7 @@ member.send("Hello there, welcome to the Axios Server.\nPlease answer the questi
 member.send("Tell me your First name after writing X! cname \n(Ex:X! cname your_name)");
 });
 
+///////////DATABASE FUNCTION///////////
 async function database(message,query1='NULL',query2='NULL',query3='NULL',query4='NULL',query5='NULL',query6='NULL',query7='NULL'){
 
     const uri = "mongodb+srv://Axios:ViHlW5EI1PXZYH4z@cluster0.hrcl9.mongodb.net/admin?retryWrites=true&w=majority";
@@ -135,10 +156,15 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
         const db = await client.db('Axios_Data');
         const collection = await db.collection('Members_Data');
         if(query1=='set'){
-             console.log(query1,query2,query3,query4,query5,query6,query7);           
-             await collection.insertOne({name: query2,github_username: query3,twitter_username: query4, codeforces_username: query5, codechef_username: query6, DID: query7}); 
-             message.channel.send("Added!");
-             //await listDatabases(client);
+             console.log(query1,query2,query3,query4,query5,query6,query7);
+             if(!(await collection.findOne({DID: query7}))){ 
+               await collection.insertOne({name: query2,github_username: query3,twitter_username: query4, codeforces_username: query5, codechef_username: query6, DID: query7}); 
+               message.channel.send("Added!");
+               //await listDatabases(client);
+               }
+             else{
+               message.channel.send("User's Data already in Database\nUse update command to update the values");
+               }  
           } 
         if(query1=="github"){
             await collection.updateOne({DID: query2 }, {'$set': {'github_username': query3}});
@@ -164,12 +190,20 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
             let twitter=items[0].twitter_username.replace(/_/g,'\\_');
             let codechef=items[0].codechef_username.replace(/_/g,'\\_');
             let codeforces=items[0].codeforces_username.replace(/_/g,'\\_');
-            message.channel.send("Name: "+name+"\nGithub Username: "+github+"\nTwitter Username: "+twitter+"\nCodechef Username: "+codechef+"\nCodeforces Username: "+codeforces);
+            message.channel.send("Name: "+name);
+            if(github != 'NA' && github != 'N/A' && github != 'NULL')
+              message.channel.send("GitHub Username: "+github);
+            if(twitter != 'NA' && twitter != 'N/A' && twitter != 'NULL')
+              message.channel.send("Twitter Username: "+twitter);
+            if(codechef != 'NA' && codechef != 'N/A' && codechef != 'NULL')
+              message.channel.send("Codechef Username: "+codecchef);
+            if(codeforces != 'NA' && codeforces != 'N/A' && codeforces != 'NULL')      
+              message.channel.send("Codeforces Username: "+codeforces);
             }
             else{                                                                               
                 message.channel.send("User's info not in the Database");
             }
-          }  
+          }    
     } catch (e) {
         console.error(e);
     } finally {
