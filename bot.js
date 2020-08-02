@@ -41,7 +41,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
            message.channel.send("```bash\n'X! set gh:github_userID tw:twitter_username cf:codeforces_username cc:codechef_username'\n```    =>This command sets your information in the database.If you don't have a username for a site then use **NA** at that place.\nEx:X! set cf:NA tw:twitt gh:NA cc:code")
            message.channel.send("```bash\n'X! update website_name new_website_username'\n```    => This command modifies the existing values in the database.\nFor Ex: To change username of twitter \nX! update twitter new_twitter_username")
            message.channel.send("```bash\n'X! info @username'\n```    => This will give the information about the member.")
-           message.channel.send("```bash\n'X! help'\n```   =>To open this help dialog\nThese commands are only usable within the server's channel.These wouldd not work in private messages to bot.")
+           message.channel.send("```bash\n'X! help'\n```   =>To open this help dialog\nThese commands are only usable within the server's channel.These would not work in private messages to bot.")
            }
        else if(input.toLowerCase()=="update"){                                                                   //ALL About UPDATE
            if(args[1].toLowerCase()=="github"){
