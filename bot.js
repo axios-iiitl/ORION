@@ -40,7 +40,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
            message.channel.send("```bash\n'X! send channel_name message'\n```   =>This command can be used to send message to the channel which you are not currently part of.**For Ex:X! send web-dev your_text**.\nChannels in which you can send message with this: competitive-programming, android-development ,cyber-security ,design ,machine-learning ,web-dev ,team-eduthon")
            message.channel.send("```bash\n'X! set gh:github_userID tw:twitter_username cf:codeforces_username cc:codechef_username'\n```    =>This command sets your information in the database.If you don't have a username for a site then use **NA** at that place.\nEx:X! set cf:NA tw:twitt gh:NA cc:code")
            message.channel.send("```bash\n'X! update website_name new_website_username'\n```    => This command modifies the existing values in the database.\nFor Ex: To change username of twitter \nX! update twitter new_twitter_username")
-           message.channel.send("```bash\n'X! info @username'\n```    => This will give the information about the member.")
+           message.channel.send("```bash\n'X! info @username'\n```    => This will give the information about the member.(")
            message.channel.send("```bash\n'X! help'\n```   =>To open this help dialog\nThese commands are only usable within the server's channel.These would not work in private messages to bot.")
            }
        else if(input.toLowerCase()=="update"){                                                                   //ALL About UPDATE
@@ -69,7 +69,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
           //  message.channel.send("Wrong ID");
           // }
           else{
-            let gh,tw,cc,cf = 'null';
+            let gh,tw,cc,cf = 'NA';
             for(i=1;i<=4;i++){                                                                               //for loop to sort values to be send
                if(args[i].split(':')[0] == "gh"){
                    gh=args[i].split(':')[1];
