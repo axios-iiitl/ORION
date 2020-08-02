@@ -69,6 +69,8 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
           //  message.channel.send("Wrong ID");
           // }
           else{
+            if(!args[4])
+              message.console.log("Syntax Error!");
             let gh,tw,cc,cf = 'NA';
             for(i=1;i<=4;i++){                                                                               //for loop to sort values to be send
                if(args[i].split(':')[0] == "gh"){
