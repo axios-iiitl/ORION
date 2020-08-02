@@ -196,7 +196,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
             if(twitter != 'NA' && twitter != 'N/A' && twitter != 'NULL')
               message.channel.send("Twitter Username: "+twitter);
             if(codechef != 'NA' && codechef != 'N/A' && codechef != 'NULL')
-              message.channel.send("Codechef Username: "+codecchef);
+              message.channel.send("Codechef Username: "+codechef);
             if(codeforces != 'NA' && codeforces != 'N/A' && codeforces != 'NULL')      
               message.channel.send("Codeforces Username: "+codeforces);
             }
