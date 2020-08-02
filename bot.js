@@ -122,7 +122,22 @@ else if ( input.toLowerCase() == "year"){                                       
     message.author.send("Please give some information about you.Ex: ***X! set gh:github_userID tw:twitter_username cf:codeforces_username cc:codechef_username*** \n If you don't have account on a website, then use NA at that place.\nFor Ex: if you don't have twitter account then your input would look like\n`X! set gh:your_github_username tw:NA cf:codeforces_username cc:codechef_username`");
 }
 else if (input.toLowerCase() == "set") {
-    await database(message,"set",client.guilds.cache.get(ID).members.cache.get(message.author.id).nickname,args[1],args[2],args[3],args[4],message.author.tag.split('#')[1]);
+    let gh,tw,cc,cf = 'null';
+    for(i=1;i<=4;i++){                                                                               //for loop to sort values to be send
+       if(args[i].split(':')[0] == "gh"){
+               gh=args[i].split(':')[1];
+               }
+       else if(args[i].split(':')[0] == 'tw'){
+               tw=args[i].split(':')[1];
+               }
+       else if(args[i].split(':')[0] == 'cf'){
+               cf=args[i].split(':')[1];
+               }
+       else if(args[i].split(':')[0] == 'cc'){
+               cc=args[i].split(':')[1];
+               }
+       }       
+    await database(message,"set",client.guilds.cache.get(ID).members.cache.get(message.author.id).nickname,gh,tw,cf,cc,message.author.tag.split('#')[1]);
     message.author.send("You are all done.Hop on to the Server and visit the info channel for all the information and rules of the server.");
     }
 else{
