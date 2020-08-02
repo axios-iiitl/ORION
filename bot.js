@@ -41,7 +41,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
            message.channel.send("```bash\n'X! set gh:github_userID tw:twitter_username cf:codeforces_username cc:codechef_username'\n```    =>This command sets your information in the database.If you don't have a username for a site then use **NA** at that place.\nEx:X! set cf:NA tw:twitt gh:NA cc:code")
            message.channel.send("```bash\n'X! update website_name new_website_username'\n```    => This command modifies the existing values in the database.\nFor Ex: To change username of twitter \nX! update twitter new_twitter_username")
            message.channel.send("```bash\n'X! info @username'\n```    => This will give the information about the member.")
-           message.channel.send("```bash\n'X! help'\n```   =>To open this help dialog")
+           message.channel.send("```bash\n'X! help'\n```   =>To open this help dialog\nThese commands are only usable within the server's channel.These wouldd not work in private messages to bot.")
            }
        else if(input.toLowerCase()=="update"){                                                                   //ALL About UPDATE
            if(args[1].toLowerCase()=="github"){
@@ -69,7 +69,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
           //  message.channel.send("Wrong ID");
           // }
           else{
-            let gh,tw,cc,cf;
+            let gh,tw,cc,cf = 'null';
             for(i=1;i<=4;i++){                                                                               //for loop to sort values to be send
                if(args[i].split(':')[0] == "gh"){
                    gh=args[i].split(':')[1];
@@ -96,7 +96,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
           await database(message,"info",DID)            
         }
        else{
-        message.channel.send("Didn't found that command!:confused:");
+        message.channel.send("Couldn't found that command!:confused:");
         } 
 }
 
@@ -126,7 +126,7 @@ else if (input.toLowerCase() == "set") {
     message.author.send("You are all done.Hop on to the Server and visit the info channel for all the information and rules of the server.");
     }
 else{
-    message.author.send("SYNTAX ERROR!");
+    message.author.send("SYNTAX ERROR! or You might have run command which is not available with dm.");
     }     
 }
 /////NEW USER THINGS///////	
