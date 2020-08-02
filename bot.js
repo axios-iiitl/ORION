@@ -96,7 +96,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
           await database(message,"info",DID)            
         }
        else{
-        message.channel.send("Couldn't found that command!:confused:");
+        message.channel.send("Couldn't find that command!:confused:");
         } 
 }
 
