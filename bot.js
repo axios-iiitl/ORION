@@ -83,7 +83,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
                else if(args[i].split(':')[0] == 'cc'){
                    cc=args[i].split(':')[1];
                    }
-               }                    
+               }                       
             await database(message,"set",message.member.user.tag.split('#')[0],gh,tw,cf,cc,message.author.tag.split('#')[1]); 
          } 
         }
@@ -122,6 +122,9 @@ else if ( input.toLowerCase() == "year"){                                       
     message.author.send("Please give some information about you.Ex: ***X! set gh:github_userID tw:twitter_username cf:codeforces_username cc:codechef_username*** \n If you don't have account on a website, then use NA at that place.\nFor Ex: if you don't have twitter account then your input would look like\n`X! set gh:your_github_username tw:NA cf:codeforces_username cc:codechef_username`");
 }
 else if (input.toLowerCase() == "set") {
+    if(!args[4]){
+        message.channel.send("Syntax Error");
+        }
     let gh,tw,cc,cf = 'null';
     for(i=1;i<=4;i++){                                                                               //for loop to sort values to be send
        if(args[i].split(':')[0] == "gh"){
