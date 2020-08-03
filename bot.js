@@ -69,8 +69,9 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
           //  message.channel.send("Wrong ID");
           // }
           else{
-            if(!args[4])
+            if(!args[4]) {
               message.console.log("Syntax Error!");
+              }
             let gh,tw,cc,cf = 'NA';
             for(i=1;i<=4;i++){                                                                               //for loop to sort values to be send
                if(args[i].split(':')[0] == "gh"){
@@ -86,7 +87,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
                    cc=args[i].split(':')[1];
                    }
                }                       
-            await database(message,"set",message.member.user.tag.split('#')[0],gh,tw,cf,cc,message.author.tag.split('#')[1]); 
+            await database(message,"set",message.member.nickname,gh,tw,cf,cc,message.author.tag.split('#')[1]); 
          } 
         }
        else if(input.toLowerCase()=="info"){
@@ -127,7 +128,7 @@ else if (input.toLowerCase() == "set") {
     if(!args[4]){
         message.channel.send("Syntax Error");
         }
-    let gh,tw,cc,cf = 'null';
+    let gh,tw,cc,cf = 'NA';
     for(i=1;i<=4;i++){                                                                               //for loop to sort values to be send
        if(args[i].split(':')[0] == "gh"){
                gh=args[i].split(':')[1];
