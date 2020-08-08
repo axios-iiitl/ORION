@@ -285,12 +285,12 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
     }
 }
 
-const j = schedule.scheduleJob({hour: 19, minute: 29}, () => {
+const j = schedule.scheduleJob({hour: 19, minute: 34}, () => {
     database("null",leaderboard);
 
 });
 
-const z = schedule.scheduleJob({hour: 19, minute: 30}, () => {
+const z = schedule.scheduleJob({hour: 19, minute: 35}, () => {
    database("null",show);
 });   
 
