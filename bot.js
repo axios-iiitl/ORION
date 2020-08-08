@@ -13,6 +13,10 @@ console.log("Starting");
 let prefix="X!";
 console.log(ID);
 client.on("ready", () =>{
+    const z = schedule.scheduleJob({hour: 20, minute: 59}, () => {
+          console.log("Inside");
+          database(client,"show");
+          }); 
     console.log(`Logged in as ${client.user.tag}!`);
     client.user.setActivity("X! help", {
     type: "LISTENING",
@@ -35,7 +39,8 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
            const listchannel = []
            client.guilds.cache.get(ID).channels.cache.forEach(channel => listchannel.push(channel.name));
            len=listchannel.length;
-           message.channel.send("These are the channels on the server:\n*"+listchannel.slice(3,len+1).join('\n*'));
+           message.channel.send(listchannel.ID);
+           //message.channel.send("These are the channels on the server:\n*"+listchannel.slice(3,len+1).join('\n*'));
            }
        else if(input.toLowerCase()=="help"){
            message.channel.send("Every command must be started with :point_right: **X!** :point_left:.\nThese commands can be used:")
@@ -247,9 +252,9 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                       DiscordID=abcd[a].DID;                         
                       let URL="https://codeforces.com/api/user.rating?handle="+handle
                       console.log(URL);
-                      let retvalue = await getdata("extract",URL,handle,CID)
+                      let retvalue = await getdata("extract",URL,handle,newID)
                       if(retvalue == "increase"){
-                               if(!(collection2.findOne({DID: DiscordID}))){
+                               if(!(await collection2.findOne({DID: DiscordID}))){
                                     await collection2.insertOne({DID: DiscordID, streak:1,name: abcd[a].name});
                                     }
                                else {
@@ -259,7 +264,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                                     }
                                 }
                       else if(retvalue == "decrease"){
-                                if((collection2.findOne({DID: DiscordID}))){
+                                if((await collection2.findOne({DID: DiscordID}))){
                                   await  collection2.updateOne({DID: DiscordID}, {'$set': { 'streak' : 0 }});
                                   }
                                 }                   
@@ -267,17 +272,21 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
               }
          }
          if(query1=='show'){
+            console.log(ID);
+            let channel = message.guilds.cache.get(ID).channels.cache.get('741677176197480509');         //here message is client as sent through arguments
+            channel.send("TEST RUN");
             const collection3 = await db.collection('leaderboard');
             var desc= { streak : -1};
-            let pr=collection3.find().sort(desc).toArray();
+            let pr=await collection3.find().sort(desc).toArray();
+            channel.send("`Rank  Name  Streak`");
             for (b in pr){
-                 let channel = message.guild.channels.cache.get(c => c.name === 'test');
-                 channel.send("TEST RUN");
+                  console.log(typeof b);
+                  rank=parseInt(b,10)+1;
+                  if((typeof pr[b].streak) != 'undefined'){
+                        channel.send("`"+rank+"\t"+pr[b].streak+"\t"+pr[b].name+"`");
+                        }           
             }
-         }   
-                 
-                        
-    }       
+         }          
     } catch (e) {
         console.error(e);
     } finally {
@@ -285,14 +294,10 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
     }
 }
 
-const j = schedule.scheduleJob({hour: 19, minute: 34}, () => {
+const j = schedule.scheduleJob({hour: 19, minute: 55}, () => {
     database("null",leaderboard);
 
 });
-
-const z = schedule.scheduleJob({hour: 19, minute: 35}, () => {
-   database("null",show);
-});   
 
 async function getdata(process,url,handle="null",ID="null"){
        if(process=='extract'){
@@ -335,7 +340,6 @@ async function getdata(process,url,handle="null",ID="null"){
        }
                   
 }  
-
 //async function listDatabases(client){
 //    databasesList = await client.db().admin().listDatabases();
 // 
