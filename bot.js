@@ -1,5 +1,7 @@
 const Discord = require("discord.js");
 const MongoClient = require('mongodb').MongoClient;
+var schedule = require('node-schedule');
+const axios = require('axios');
 
 const client = new Discord.Client();
 
@@ -207,7 +209,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
             items=await collection.find({DID: query2}).toArray() 
             if(Array.isArray(items) && items.length ){                                                       //Check whether user's info has been fetched.    
             let name=items[0].name;
-            let github=items[0].github_username.replace(/_/g,'\\_');                                        //escaping text formatiing characters
+            let github=items[0].github_username.replace(/_/g,'\\_');                                        //escaping text formating characters
             let twitter=items[0].twitter_username.replace(/_/g,'\\_');
             let codechef=items[0].codechef_username.replace(/_/g,'\\_');
             let codeforces=items[0].codeforces_username.replace(/_/g,'\\_');
@@ -224,16 +226,119 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
             else{                                                                               
                 message.channel.send("User's info not in the Database");
             }
-          }    
+          }
+        if(query1=='leaderboard'){
+            const collection2 = await db.collection('leaderboard');
+            let data = await collection2.findOne({imp: "1"});
+            let CID=data.contest;            
+            let URL="https://codeforces.com/api/contest.list";
+            var newID = await getdata("check",URL);
+            if(newID != CID){
+                 console.log(newID);
+                 await collection2.updateOne({imp: "1"},{ '$set' : { 'contest' : newID }});
+                 let abcd=await collection.find().toArray();
+                 console.log( abcd[0].twitter_username);
+                 for (a in abcd)  {
+                      handle=abcd[a].codeforces_username;
+                      if(handle === "NA" || handle === "NULL"){
+                            console.log("No handle");
+                            continue;
+                         }
+                      DiscordID=abcd[a].DID;                         
+                      let URL="https://codeforces.com/api/user.rating?handle="+handle
+                      console.log(URL);
+                      let retvalue = await getdata("extract",URL,handle,CID)
+                      if(retvalue == "increase"){
+                               if(!(collection2.findOne({DID: DiscordID}))){
+                                    await collection2.insertOne({DID: DiscordID, streak:1,name: abcd[a].name});
+                                    }
+                               else {
+                                    let dat = await collection2.findOne({DID: DiscordID});
+                                    let streak=dat.streak;
+                                    await collection2.updateOne({DID: DiscordID}, {'$set': { 'streak' : streak+1 }});
+                                    }
+                                }
+                      else if(retvalue == "decrease"){
+                                if((collection2.findOne({DID: DiscordID}))){
+                                  await  collection2.updateOne({DID: DiscordID}, {'$set': { 'streak' : 0 }});
+                                  }
+                                }                   
+                  }               
+              }
+         }
+         if(query1=='show'){
+            const collection3 = await db.collection('leaderboard');
+            var desc= { streak : -1};
+            let pr=collection3.find().sort(desc).toArray();
+            for (b in pr){
+                 let channel = message.guild.channels.cache.get(c => c.name === 'test');
+                 channel.send("TEST RUN");
+            }
+         }   
+                 
+                        
+    }       
     } catch (e) {
         console.error(e);
     } finally {
         await client.close();
     }
 }
-async function listDatabases(client){
-    databasesList = await client.db().admin().listDatabases();
- 
-    console.log("Databases:");
-    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-};
+
+const j = schedule.scheduleJob({hour: 19, minute: 29}, () => {
+    database("null",leaderboard);
+
+});
+
+const z = schedule.scheduleJob({hour: 19, minute: 30}, () => {
+   database("null",show);
+});   
+
+async function getdata(process,url,handle="null",ID="null"){
+       if(process=='extract'){
+        try {
+              const response = await axios.get(url)
+              let extract=response.data.result;
+              let a;
+              for (a in extract){
+                 // console.log(extract[a].oldRating);
+               }
+              console.log(handle);   
+              console.log(extract[a].oldRating);
+              console.log(extract[a].newRating);
+              if(extract[a].contestId == ID){
+                   if(extract[a].oldRating > extract[a].newRating){return "decrease";}
+                   else {return "increase";}      
+                 }
+              else{
+                  return "nochange";
+                  }              
+         } catch (error) {
+         console.log("ERROR1");
+         }
+        }
+       if(process=='check'){
+        try { 
+              console.log("Tst");
+              console.log(url);
+              const response = await axios.get(url)
+              let extract=response.data.result;
+              for(var n=0; n<=25 ;n++){
+              if(extract[n].phase == "FINISHED"){
+                  break;
+                  }
+              }
+              return extract[n].id;
+            } catch (error){
+            console.log(error.response.status);
+            }
+       }
+                  
+}  
+
+//async function listDatabases(client){
+//    databasesList = await client.db().admin().listDatabases();
+// 
+//    console.log("Databases:");
+//    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+//};
