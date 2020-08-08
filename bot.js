@@ -39,7 +39,7 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
            const listchannel = []
            client.guilds.cache.get(ID).channels.cache.forEach(channel => listchannel.push(channel.name));
            len=listchannel.length;
-           message.channel.send(listchannel.ID);
+           message.channel.send(listchannel);
            //message.channel.send("These are the channels on the server:\n*"+listchannel.slice(3,len+1).join('\n*'));
            }
        else if(input.toLowerCase()=="help"){
