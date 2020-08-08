@@ -13,7 +13,7 @@ console.log("Starting");
 let prefix="X!";
 console.log(ID);
 client.on("ready", () =>{
-    const z = schedule.scheduleJob({hour: 21, minute: 27}, () => {
+    const z = schedule.scheduleJob({hour: 21, minute: 46}, () => {
           console.log("Inside");
           database(client,"show");
           }); 
@@ -274,7 +274,6 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
          if(query1=='show'){
             console.log(ID);
             let channel = message.guilds.cache.get(ID).channels.cache.get('741677176197480509');         //here message is client as sent through arguments
-            channel.send("TEST RUN");
             const collection3 = await db.collection('leaderboard');
             var desc= { streak : -1};
             let pr=await collection3.find().sort(desc).toArray();
@@ -294,8 +293,8 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
     }
 }
 
-const j = schedule.scheduleJob({hour: 21, minute: 25}, () => {
-    database("null",leaderboard);
+const j = schedule.scheduleJob({hour: 21, minute: 38}, () => {
+    database("null","leaderboard");
 
 });
 
