@@ -294,7 +294,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
     }
 }
 
-const j = schedule.scheduleJob({hour: 19, minute: 55}, () => {
+const j = schedule.scheduleJob({hour: 20, minute: 55}, () => {
     database("null",leaderboard);
 
 });
