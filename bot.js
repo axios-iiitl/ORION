@@ -13,7 +13,7 @@ console.log("Starting");
 let prefix="X!";
 console.log(ID);
 client.on("ready", () =>{
-    const z = schedule.scheduleJob({hour: 21, minute: 56}, () => {
+    const z = schedule.scheduleJob({hour: 20, minute: 59}, () => {
           console.log("Inside");
           database(client,"show");
           }); 
@@ -293,7 +293,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
     }
 }
 
-const j = schedule.scheduleJob({hour: 21, minute: 38}, () => {
+const j = schedule.scheduleJob({hour: 20, minute: 30}, () => {
     database("null","leaderboard");
 
 });
