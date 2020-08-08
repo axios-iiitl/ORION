@@ -13,7 +13,7 @@ console.log("Starting");
 let prefix="X!";
 console.log(ID);
 client.on("ready", () =>{
-    const z = schedule.scheduleJob({hour: 21, minute: 51}, () => {
+    const z = schedule.scheduleJob({hour: 21, minute: 56}, () => {
           console.log("Inside");
           database(client,"show");
           }); 
