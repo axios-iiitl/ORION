@@ -13,7 +13,7 @@ console.log("Starting");
 let prefix="X!";
 console.log(ID);
 client.on("ready", () =>{
-    const z = schedule.scheduleJob({hour: 19, minute: 40}, () => {
+    const z = schedule.scheduleJob({hour: 20, minute: 59}, () => {
           console.log("Inside");
           database(client,"show");
           }); 
@@ -277,7 +277,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
             const collection3 = await db.collection('leaderboard');
             var desc= { streak : -1};
             let pr=await collection3.find().sort(desc).toArray();
-            channel.send(":trophy:**LEADERBOARD**<:dir:734777015743545344>\n`Rank   Streak   Name`");
+            channel.send("\t\u200b\u200b\u200b:trophy:  **LEADERBOARD**  <:dir:734777015743545344>\t\n\u200b\u200b\u200b`Rank   Streak   Name`");
             for (b in pr){
                   console.log(typeof b);
                   rank=parseInt(b,10)+1;
@@ -287,14 +287,14 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                              }
                         if(rank==1){
                              if(pr[b].streak == 0){
-                               channel.send("`"+rank+"\t\t"+pr[b].streak+"\t  "+pr[b].name+"`<:emoji_2:734775209399418970>")
+                               channel.send("\t\u200b\u200b\u200b`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+"`<:emoji_2:734775209399418970>")
                              }
                              else{
-                               channel.send("`"+rank+"\t\t"+pr[b].streak+"\t  "+pr[b].name+"`:crown:");
+                               channel.send("\t\u200b\u200b\u200b`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+"`:crown:");
                              }
                         }
                         else{
-                             channel.send("`"+rank+"\t\t"+pr[b].streak+"\t  "+pr[b].name+"`");
+                             channel.send("\t\u200b\u200b\u200b`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+"`");
                         }
                   }                 
             }
@@ -306,7 +306,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
     }
 }
 
-const j = schedule.scheduleJob({hour: 19, minute: 21}, () => {
+const j = schedule.scheduleJob({hour: 20, minute: 30}, () => {
     database("null","leaderboard");
 
 });
