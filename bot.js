@@ -273,11 +273,11 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
          }
          if(query1=='show'){
             console.log(ID);
-            let channel = message.guilds.cache.get(ID).channels.cache.get('741677176197480509');         //here message is client as sent through arguments
+            let channel = message.guilds.cache.get(ID).channels.cache.get('742036006517342269');         //here message is client as sent through arguments
             const collection3 = await db.collection('leaderboard');
             var desc= { streak : -1};
             let pr=await collection3.find().sort(desc).toArray();
-            channel.send("\t\u200b\u200b\u200b:trophy:  **LEADERBOARD**  <:dir:734777015743545344>\t\n\u200b\u200b\u200b`Rank   Streak   Name`");
+            channel.send(":trophy:  **LEADERBOARD**  <:dir:734777015743545344>\n`Rank   Streak   Name`");
             for (b in pr){
                   console.log(typeof b);
                   rank=parseInt(b,10)+1;
@@ -287,14 +287,14 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                              }
                         if(rank==1){
                              if(pr[b].streak == 0){
-                               channel.send("\t\u200b\u200b\u200b`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+"`<:emoji_2:734775209399418970>")
+                               channel.send("`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+"`<:emoji_2:734775209399418970>")
                              }
                              else{
-                               channel.send("\t\u200b\u200b\u200b`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+"`:crown:");
+                               channel.send("`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+"`:crown:");
                              }
                         }
                         else{
-                             channel.send("\t\u200b\u200b\u200b`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+"`");
+                             channel.send("`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+"`");
                         }
                   }                 
             }
