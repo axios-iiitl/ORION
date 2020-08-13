@@ -13,7 +13,7 @@ console.log("Starting");
 let prefix="X!";
 console.log(ID);
 client.on("ready", () =>{
-    const z = schedule.scheduleJob({hour: 20, minute: 59}, () => {
+    const z = schedule.scheduleJob({hour: 23, minute: 16}, () => {
           console.log("Inside");
           database(client,"show");
           }); 
@@ -237,10 +237,9 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
             let data = await collection2.findOne({imp: "1"});
             let CID=data.contest;            
             let URL="https://codeforces.com/api/contest.list";
-            var newID = await getdata("check",URL);
-            if(newID != CID){
+            const newID = await getdata("check",URL,"null",CID);
+            if( newID && newID.length ){
                  console.log(newID);
-                 await collection2.updateOne({imp: "1"},{ '$set' : { 'contest' : newID }});
                  let abcd=await collection.find().toArray();
                  console.log( abcd[0].twitter_username);
                  for (a in abcd)  {
@@ -252,12 +251,15 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                       DiscordID=abcd[a].DID;                         
                       let URL="https://codeforces.com/api/user.rating?handle="+handle
                       console.log(URL);
-                      let retvalue = await getdata("extract",URL,handle,newID)
+                      for ( m in newID ){
+                      let retvalue = await getdata("extract",URL,handle,newID[m])
+                      console.log(retvalue);
                       if(retvalue == "increase"){
                                if(!(await collection2.findOne({DID: DiscordID}))){
-                                    await collection2.insertOne({DID: DiscordID, streak:1,name: abcd[a].name});
+                                    await collection2.insertOne({DID: DiscordID, streak:1,name: abcd[a].name, cfhandle: handle});
                                     }
                                else {
+                                    console.log("changing");
                                     let dat = await collection2.findOne({DID: DiscordID});
                                     let streak=dat.streak;
                                     await collection2.updateOne({DID: DiscordID}, {'$set': { 'streak' : streak+1 }});
@@ -268,6 +270,8 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                                   await  collection2.updateOne({DID: DiscordID}, {'$set': { 'streak' : 0 }});
                                   }
                                 }                   
+                    }
+                    await collection2.updateOne({imp: "1"},{ '$set' : { 'contest' : newID[m] }});
                   }               
               }
          }
@@ -287,14 +291,14 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                              }
                         if(rank==1){
                              if(pr[b].streak == 0){
-                               channel.send("`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+"`<:emoji_2:734775209399418970>")
+                               channel.send("`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+":"+pr[b].cfhandle+"`<:emoji_2:734775209399418970>")
                              }
                              else{
-                               channel.send("`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+"`:crown:");
+                               channel.send("`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+":"+pr[b].cfhandle+"`:crown:");
                              }
                         }
                         else{
-                             channel.send("`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+"`");
+                             channel.send("`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+":"+pr[b].cfhandle+"`");
                         }
                   }                 
             }
@@ -306,7 +310,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
     }
 }
 
-const j = schedule.scheduleJob({hour: 20, minute: 30}, () => {
+const j = schedule.scheduleJob({hour: 23, minute: 4, second: 5}, () => {
     database("null","leaderboard");
 
 });
@@ -320,10 +324,10 @@ async function getdata(process,url,handle="null",ID="null"){
               for (a in extract){
                  // console.log(extract[a].oldRating);
                }
-              console.log(handle);   
-              console.log(extract[a].oldRating);
-              console.log(extract[a].newRating);
+              console.log(extract[a].id,handle);   
               if(extract[a].contestId == ID){
+                   console.log(extract[a].oldRating);
+                   console.log(extract[a].newRating);
                    if(extract[a].oldRating > extract[a].newRating){return "decrease";}
                    else {return "increase";}      
                  }
@@ -340,12 +344,18 @@ async function getdata(process,url,handle="null",ID="null"){
               console.log(url);
               const response = await axios.get(url)
               let extract=response.data.result;
+              IDS= [];
               for(var n=0; n<=25 ;n++){
               if(extract[n].phase == "FINISHED"){
-                  break;
+                  if(extract[n].id == ID){
+                          break;
+                          }
+                  else{
+                          IDS.push(extract[n].id);     
+                   }          
                   }
               }
-              return extract[n].id;
+              return IDS;
             } catch (error){
             console.log(error.response.status);
             }
