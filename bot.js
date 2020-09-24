@@ -9,20 +9,30 @@ client.login("NzM0NDkwMTA2NTYzNjU3ODA4.XxSdPg.OQrPZ6WJutGwc8AJWwlmCJ2SciU");
 
 let ID='733628966665191546';                                   //Guild id axios:733628966665191546 ; guild id cirius:734492621950419025
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 console.log("Starting");
 let prefix="X!";
 console.log(ID);
+var timevar=0;
 client.on("ready", () =>{
-    const z = schedule.scheduleJob({hour: 20, minute: 59}, () => {
+    const z = schedule.scheduleJob({hour: 20, minute: 59}, () => {                            //Print leaderboard of codeforces's streak
+          timevar+=1;
+          if(timevar == 3){
+          timevar=0;
           console.log("Inside");
           database(client,"show");
+          }
           }); 
-    console.log(`Logged in as ${client.user.tag}!`);
-    client.user.setActivity("X! help", {
+    console.log(`Logged in as ${client.user.tag}!`);                     
+    client.user.setActivity("X! help", {                                                       //Set the status of the bot
     type: "LISTENING",
     url: "https://www.fake.tt/"
 });
 });
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////ALL THE COMMANDS OF BOT AVAILABLE INSIDE SERVER////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 client.on("message", async message => {
 if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "dm"){                                                //check for prefix
        console.log(message.content);
@@ -110,7 +120,9 @@ if(message.content.toUpperCase().startsWith(prefix) && message.channel.type != "
         } 
 }
 
-/////////RELATED TO DM////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////COMMAND WORKING IN DM AND FOR NEW USERS////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 if(message.guild == null && message.content.toUpperCase().startsWith(prefix)) {                                              //Check if it is private message and check for prefix
 const args = message.content.slice(prefix.length).trim().split(' ');                                           //extract words from the sentence provided
 console.log(message.content);
@@ -157,7 +169,10 @@ else{
     message.author.send("SYNTAX ERROR! or You might have run command which is not available with dm.");
     }     
 }
-/////NEW USER THINGS///////	
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////CHECKS FOR NEW USERS AND SENDS A MESSAGE TO NEW USERS////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 let {guild} = message;
 console.log(guild ? `New message in ${guild.name}` : "New private message");
 });
@@ -172,7 +187,10 @@ member.send("Hello there, welcome to the Axios Server.\nPlease answer the questi
 member.send("Tell me your First name after writing X! cname \n(Ex:X! cname your_name)");
 });
 
-///////////DATABASE FUNCTION///////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////DATABASE RELATED THINGS///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////EDIT WITH CAUTION//////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function database(message,query1='NULL',query2='NULL',query3='NULL',query4='NULL',query5='NULL',query6='NULL',query7='NULL'){
 
     const uri = "mongodb+srv://Axios:ViHlW5EI1PXZYH4z@cluster0.hrcl9.mongodb.net/admin?retryWrites=true&w=majority";
@@ -183,7 +201,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
         // Make the appropriate DB calls
         const db = await client.db('Axios_Data');
         const collection = await db.collection('Members_Data');
-        if(query1=='set'){
+        if(query1=='set'){                                                                       ////Update Database with the values provided by the user
              console.log(query1,query2,query3,query4,query5,query6,query7);
              if(!(await collection.findOne({DID: query7}))){ 
                await collection.insertOne({name: query2,github_username: query3,twitter_username: query4, codeforces_username: query5, codechef_username: query6, DID: query7}); 
@@ -193,24 +211,24 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
              else{
                message.channel.send("User's Data already in Database\nUse update command to update the values");
                }  
-          } 
-        if(query1=="github"){
+          }       
+        if(query1=="github"){                                                                                  //update github handle
             await collection.updateOne({DID: query2 }, {'$set': {'github_username': query3}});
             message.channel.send("Updated!");
           }
-        if(query1=='twitter'){
+        if(query1=='twitter'){                                                           			    //update twitter handle
             await collection.updateOne({DID: query2 }, {'$set': {'twitter_username': query3}});
             message.channel.send("Updated!");            
           }
-        if(query1=='codechef'){
+        if(query1=='codechef'){                                                                               //update codechef 
             await collection.updateOne({DID: query2 }, {'$set': {'codechef_username': query3}});
             message.channel.send("Updated!");           
           }        
-        if(query1=='codeforces'){
+        if(query1=='codeforces'){                                                                             //update codeforces handle
             await collection.updateOne({DID: query2 }, {'$set': {'codeforces_username': query3}});
             message.channel.send("Updated!");
           }
-        if(query1=='info'){  
+        if(query1=='info'){                                                                                  //Fetch the info
             items=await collection.find({DID: query2}).toArray() 
             if(Array.isArray(items) && items.length ){                                                       //Check whether user's info has been fetched.    
             let name=items[0].name;
@@ -310,7 +328,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
     }
 }
 
-const j = schedule.scheduleJob({hour: 20, minute: 30}, () => {
+const j = schedule.scheduleJob({hour: 20, minute: 30}, () => {                                        //Update data in leaderboard
     database("null","leaderboard");
 
 });
