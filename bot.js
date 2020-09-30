@@ -15,20 +15,18 @@ console.log("Starting");
 let prefix="X!";
 console.log(ID);
 var timevar=0;
+var channel,channelupdates;                                                                   //variable for leaderboard channel and hacktober-updates channel
 client.on("ready", () =>{
     const z = schedule.scheduleJob({hour: 20, minute: 59}, () => {                            //Print leaderboard of codeforces's streak
-          timevar+=1;
-          if(timevar == 3){
-          timevar=0;
-          console.log("Inside");
-          database(client,"show");
-          }
-          }); 
+          show();
+        }); 
     console.log(`Logged in as ${client.user.tag}!`);                     
     client.user.setActivity("X! help", {                                                       //Set the status of the bot
     type: "LISTENING",
     url: "https://www.fake.tt/"
 });
+channel=client.guilds.cache.get(ID).channels.cache.get('742036006517342269');                  //These objects can be used correctly after initailization.
+channelupdates=client.guilds.cache.get(ID).channels.cache.get('760539895478353991');           //which happens approximately after a second script gets started.
 });
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////ALL THE COMMANDS OF BOT AVAILABLE INSIDE SERVER////////////////////////////////////////////////////////////////////
@@ -294,10 +292,10 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
               }
          }
          if(query1=='show'){
+			if(query2=='cf'){ 
             console.log(ID);
-            let channel = message.guilds.cache.get(ID).channels.cache.get('742036006517342269');         //here message is client as sent through arguments
             const collection3 = await db.collection('leaderboard');
-            var desc= { streak : -1};
+            var desc= { streak : -1};                                                   //For making the data fetched from database to get sorted in descending order.
             let pr=await collection3.find().sort(desc).toArray();
             channel.send(":trophy:  **LEADERBOARD**  <:dir:734777015743545344>\n`Rank   Streak   Name`");
             for (b in pr){
@@ -308,7 +306,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                              break;
                              }
                         if(rank==1){
-                             if(pr[b].streak == 0){
+                             if(pr[b].streak == 0){                  
                                channel.send("`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+":"+pr[b].cfhandle+"`<:emoji_2:734775209399418970>")
                              }
                              else{
@@ -318,9 +316,111 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                         else{
                              channel.send("`\u200b "+rank+"       "+pr[b].streak+"      "+pr[b].name+":"+pr[b].cfhandle+"`");
                         }
-                  }                 
+                  }
+                }
             }
-         }          
+            else if(query2=='hacktober'){
+			    const collection4 = await db.collection('hacktober');
+			    var desc= { pulls : -1};
+			    let pr1=await collection4.find().sort(desc).toArray();
+			    channel.send(":trophy:  **HACKTOBER LEADERBOARD**  <:dir:734777015743545344>\n`Rank   Pulls   Name`");
+			    for (b in pr1){
+                  console.log(typeof b);
+                  rank=parseInt(b,10)+1;
+                  if((typeof pr1[b].pulls) != 'undefined'){
+                        if(rank==11){
+                             break;
+                             }
+                        if(rank==1){
+                             if(pr1[b].pulls == 0){                      //Check if the user is on top of leaderboard with 0 pulls
+                               channel.send("`\u200b "+rank+"       "+pr1[b].pulls+"      "+pr1[b].name+":"+pr1[b].github_handle+"`<:emoji_2:734775209399418970>");    
+                             }
+                             else{
+                               channel.send("`\u200b "+rank+"       "+pr1[b].pulls+"      "+pr1[b].name+":"+pr1[b].github_handle+"`:crown:");
+                             }
+                        }
+                        else{
+                             channel.send("`\u200b "+rank+"       "+pr1[b].pulls+"      "+pr1[b].name+":"+pr1[b].github_handle+"`");
+                        }
+                  }
+                }
+			    
+			}   
+		  }                   
+         if(query1=='hacktober'){                                                           //hacktober leaderboard
+            var collection5= await db.collection('hacktober');
+                 let abcd=await collection.find().toArray();
+                 console.log( abcd[0].github_username);
+                 for (a in abcd)  {
+                      handle=abcd[a].github_username;
+                      if(handle === "NA" || handle === "NULL"){
+                            console.log("No handle");
+                            continue;
+                         }
+                      var DiscordID=abcd[a].DID;    
+                      Name=abcd[a].name;
+                      console.log(DiscordID);                     
+                      let URL="https://api.github.com/users/"+handle+"/events"
+                      console.log(URL);
+                      var m;
+                      let retvalue = await githubdata("extract",URL,handle)
+                      //console.log(retvalue);
+                      if(retvalue){
+                               let streak=0;
+                               let last;
+                               var fetched=await collection5.find({ DID: DiscordID }).toArray();
+                               console.log(typeof fetched);
+                               if(!(fetched && fetched.length)){
+                                        console.log("Account not in database");
+                                        let repo,name;
+                                        let flag=0;
+                                        for (b in retvalue) {
+                                              if(retvalue[b].created_at.split('-')[1] == '10'){
+                                                    if(retvalue[b].type == 'PullRequestEvent'){ 
+                                                        streak++;
+                                                        if(flag == 0){console.log(streak); flag++;last=retvalue[b].id;}                                          //For storing the value of last variable.
+                                                        repoapi = retvalue[b].payload.pull_request.url;
+                                                        name = retvalue[b].payload.pull_request.title;
+                                                        repo=repoapi.replace("api.","").replace("/repos","");
+                                                        channelupdates.send(handle+" made a pull request **"+name+"** at "+repo);   
+                                                    }    
+                                              }
+                                              else { 
+                                                   break;
+                                                }
+                                        }     
+                                        collection5.insertOne({ DID: DiscordID, github_handle: handle, lastchange: last,pulls: streak,name: Name});
+                                     }   
+                              else{
+                                       console.log("Account in database");
+                                       last=fetched[0].lastchange;
+                                       streak=fetched[0].Streak;
+                                       console.log(last);
+                                       for (b in retvalue){
+                                               if(retvalue[b].created_at.split('-')[1] == '10'){
+                                                         if(retvalue[b].type == 'PullRequestEvent'){
+                                                              if(retvalue[b].id != last){
+                                                                streak++;
+                                                                if(flag == 0){console.log(streak); flag++;last=retvalue[b].id;}
+                                                                repo = retvalue[b].payload.pull_request.url;
+                                                                name = retvalue[b].payload.pull_request.title;
+                                                                channel.send(handle+" made a pull request **"+name+"** at "+repo); 
+                                                                }
+                                                              else{
+                                                                break;
+                                                                }
+                                                         }
+                                                }           
+                                                else{
+                                                    break;
+                                                }
+                                         }                                                
+                                      collection5.updateOne({ DID:DiscordID },{'$set' : { pulls: streak, lastchange: last }});                          
+                             }        
+                      }  
+                       //break;      
+                 }
+                 }          
     } catch (e) {
         console.error(e);
     } finally {
@@ -328,10 +428,27 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
     }
 }
 
-const j = schedule.scheduleJob({hour: 20, minute: 30}, () => {                                        //Update data in leaderboard
-    database("null","leaderboard");
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////DATABASE FUNCTION ENDS////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+const j = schedule.scheduleJob({hour: 20, minute: 30}, () => {                                        //Update data in leaderboard
+     database("null","leaderboard");
 });
+
+setInterval(database,300000,"null","hacktober");
+
+async function show(){
+	database("null","show","cf");
+	await new Promise(resolve => setTimeout(resolve, 120000));                                        //Wait 2 min
+    database("null","show","hacktober");
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////Things Related to using API and stuff to retrieve data from websites//////////////////////////////////////////////////////////////////
+
 
 async function getdata(process,url,handle="null",ID="null"){
        if(process=='extract'){
@@ -380,6 +497,26 @@ async function getdata(process,url,handle="null",ID="null"){
        }
                   
 }  
+
+async function githubdata(process,url,handle="null"){
+       if(process=='extract'){
+        try {
+              const config = { 
+                    method: 'get',
+                    url: url,
+                    headers: { 'Authorization' : 'token 7bf537e0e7a8f2f104dcf782a8b90810cb42d5ba' } 
+                    }
+              
+              let response = await axios(config)
+              let extract=response.data;
+              let a;
+              console.log(extract['0'].created_at.split('-')[1]);
+              return extract;                  
+         } catch (error) {
+         console.log("ERROR1");
+         }
+       }            
+} 
 //async function listDatabases(client){
 //    databasesList = await client.db().admin().listDatabases();
 // 
