@@ -396,6 +396,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                                        last=fetched[0].lastchange;
                                        streak=fetched[0].pulls;
                                        console.log(last);
+                                       let flag=0;
                                        for (b in retvalue){
                                                if(retvalue[b].created_at.split('-')[1] == '10'){
                                                          if(retvalue[b].type == 'PullRequestEvent'){
