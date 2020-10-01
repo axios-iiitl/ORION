@@ -4,10 +4,9 @@ var schedule = require('node-schedule');
 const axios = require('axios');
 require('dotenv').config();
 
-console.log(process.env.TEST);
 const client = new Discord.Client();
 
-client.login("NzM0NDkwMTA2NTYzNjU3ODA4.XxSdPg.OQrPZ6WJutGwc8AJWwlmCJ2SciU");
+client.login(process.env.DISCORD_TOKEN);
 
 let ID='733628966665191546';                                   //Guild id axios:733628966665191546 ; guild id cirius:734492621950419025
 
@@ -193,7 +192,7 @@ member.send("Tell me your First name after writing X! cname \n(Ex:X! cname your_
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 async function database(message,query1='NULL',query2='NULL',query3='NULL',query4='NULL',query5='NULL',query6='NULL',query7='NULL'){
 
-    const uri = "mongodb+srv://Axios:ViHlW5EI1PXZYH4z@cluster0.hrcl9.mongodb.net/admin?retryWrites=true&w=majority";
+    const uri = process.env.MONGOURI;
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true }); 
     try {
         // Connect to the MongoDB cluster
@@ -505,10 +504,11 @@ async function getdata(process,url,handle="null",ID="null"){
 async function githubdata(process,url,handle="null"){
        if(process=='extract'){
         try {
+			let auth='token '+process.env.GITHUB_TOKEN
               const config = { 
                     method: 'get',
                     url: url,
-                    headers: { 'Authorization' : 'token 7bf537e0e7a8f2f104dcf782a8b90810cb42d5ba' } 
+                    headers: { 'Authorization' : auth } 
                     }
               
               let response = await axios(config)
