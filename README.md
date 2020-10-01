@@ -12,4 +12,4 @@ The bot currently offers serveral features that include,
 
 **All the syntax of the commands can be queried by sending _X! help_ to any channel on the server.**
 
-Created By @hellrider9 & @narendraiiitl
+Created By [@hellrider9](https://github.com/hellrider9) & [@narendraiiitl](https://github.com/narendraiiitl)
