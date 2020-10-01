@@ -2,7 +2,9 @@ const Discord = require("discord.js");
 const MongoClient = require('mongodb').MongoClient;
 var schedule = require('node-schedule');
 const axios = require('axios');
+require('dotenv').config();
 
+console.log(process.env.TEST);
 const client = new Discord.Client();
 
 client.login("NzM0NDkwMTA2NTYzNjU3ODA4.XxSdPg.OQrPZ6WJutGwc8AJWwlmCJ2SciU");
