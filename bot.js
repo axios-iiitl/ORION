@@ -500,7 +500,7 @@ async function getdata(process,url,handle="null",ID="null"){
        }
                   
 }  
-let auth="'token "+process.env.GITHUB_TOKEN+"'";                                                  //Creating header value to be passed for authenticating with github api
+let auth="token "+process.env.GITHUB_TOKEN;                                                  //Creating header value to be passed for authenticating with github api
 async function githubdata(process,url,handle="null"){
        if(process=='extract'){
         try {
