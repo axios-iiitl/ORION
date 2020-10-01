@@ -367,7 +367,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                       //console.log(retvalue);
                       if(retvalue){
                                let streak=0;
-                               let last;
+                               let last="NA";
                                var fetched=await collection5.find({ DID: DiscordID }).toArray();
                                console.log(typeof fetched);
                                if(!(fetched && fetched.length)){
