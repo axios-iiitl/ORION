@@ -2,8 +2,9 @@
 A discord bot for the Axios Server.
 
 ## Info
-The bot currently offers serveral features that include,
 **Prefix used by Bot _X!_**
+
+The bot currently offers serveral features that include,
 * Getting new member's information.
 * Fetching any members information using **info** command.
 * Sending message to a particular wing using **send** command.
