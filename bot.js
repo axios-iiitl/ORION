@@ -394,7 +394,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                               else{
                                        console.log("Account in database");
                                        last=fetched[0].lastchange;
-                                       streak=fetched[0].Streak;
+                                       streak=fetched[0].pulls;
                                        console.log(last);
                                        for (b in retvalue){
                                                if(retvalue[b].created_at.split('-')[1] == '10'){
