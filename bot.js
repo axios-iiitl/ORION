@@ -403,8 +403,9 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                                                               if(retvalue[b].id != last){
                                                                 streak++;
                                                                 if(flag == 0){console.log(streak); flag++;last=retvalue[b].id;}
-                                                                repo = retvalue[b].payload.pull_request.url;
+                                                                repoapi = retvalue[b].payload.pull_request.url;
                                                                 name = retvalue[b].payload.pull_request.title;
+                                                                repo=repoapi.replace("api.","").replace("/repos","");
                                                                 channel.send(handle+" made a pull request **"+name+"** at "+repo); 
                                                                 }
                                                               else{
