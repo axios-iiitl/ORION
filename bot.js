@@ -380,9 +380,8 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                                                     if(retvalue[b].type == 'PullRequestEvent'){ 
                                                         streak++;
                                                         if(flag == 0){console.log(streak); flag++;last=retvalue[b].id;}                                          //For storing the value of last variable.
-                                                        repoapi = retvalue[b].payload.pull_request.url;
+                                                        repo = retvalue[b].payload.pull_request.html_url;
                                                         name = retvalue[b].payload.pull_request.title;
-                                                        repo=repoapi.replace("api.","").replace("/repos","");
                                                         channelupdates.send(handle+" made a pull request **"+name+"** at "+repo);   
                                                     }    
                                               }
@@ -402,12 +401,12 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                                                if(retvalue[b].created_at.split('-')[1] == '10'){
                                                          if(retvalue[b].type == 'PullRequestEvent'){
                                                               if(retvalue[b].id != last){
+																console.log(retvalue[b]);  
                                                                 streak++;
                                                                 console.log(streak);
-                                                                if(flag == 0){console.log(streak); flag++;last=retvalue[b].id;}
-                                                                repoapi = retvalue[b].payload.pull_request.url;
+                                                                if(flag == 0){console.log(streak); flag++;newlast=retvalue[b].id;}
+                                                                repo = retvalue[b].payload.pull_request.html_url;
                                                                 name = retvalue[b].payload.pull_request.title;
-                                                                repo=repoapi.replace("api.","").replace("/repos","");
                                                                 channelupdates.send(handle+" made a pull request **"+name+"** at "+repo); 
                                                                 }
                                                               else{
@@ -419,7 +418,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                                                     break;
                                                 }
                                          }                                                
-                                      collection5.updateOne({ DID:DiscordID },{'$set' : { pulls: streak, lastchange: last }});                          
+                                     collection5.updateOne({ DID:DiscordID },{'$set' : { pulls: streak, lastchange: newlast }});                          
                              }        
                       }  
                        //break;      
