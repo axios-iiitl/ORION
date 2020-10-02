@@ -403,6 +403,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                                                          if(retvalue[b].type == 'PullRequestEvent'){
                                                               if(retvalue[b].id != last){
                                                                 streak++;
+                                                                console.log(streak);
                                                                 if(flag == 0){console.log(streak); flag++;last=retvalue[b].id;}
                                                                 repoapi = retvalue[b].payload.pull_request.url;
                                                                 name = retvalue[b].payload.pull_request.title;
