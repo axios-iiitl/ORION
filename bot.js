@@ -395,6 +395,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                               else{
                                        console.log("Account in database");
                                        last=fetched[0].lastchange;
+                                       newlast=last;
                                        streak=fetched[0].pulls;
                                        console.log(last);
                                        let flag=0;
