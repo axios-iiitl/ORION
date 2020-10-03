@@ -402,8 +402,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                                        for (b in retvalue){
                                                if(retvalue[b].created_at.split('-')[1] == '10'){
                                                          if(retvalue[b].type == 'PullRequestEvent'){
-                                                              if(retvalue[b].id != last){
-																console.log(retvalue[b]);  
+                                                              if(retvalue[b].id != last){  
                                                                 streak++;
                                                                 console.log(streak);
                                                                 if(flag == 0){console.log(streak); flag++;newlast=retvalue[b].id;}
