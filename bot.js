@@ -403,7 +403,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                                        for (b in retvalue){
                                                if(retvalue[b].created_at.split('-')[1] == '10'){
                                                          if(retvalue[b].type == 'PullRequestEvent'){
-															if(retvalue[b].payload.action=='opened'&&retvalue[b].payload.pull_request.user.login==handle){
+															if(retvalue[b].payload.action=='opened'&&retvalue[b].payload.pull_request.user.login==handle){            //check if the person has opened the pull request or is closing someone else PR
                                                               if(retvalue[b].id != last){  
                                                                 streak++;
                                                                 console.log(streak);
