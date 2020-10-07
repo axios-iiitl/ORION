@@ -361,7 +361,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                       var DiscordID=abcd[a].DID;    
                       Name=abcd[a].name;
                       console.log(DiscordID);                     
-                      let URL="https://api.github.com/users/"+handle+"/events"
+                      let URL="https://api.github.com/users/"+handle+"/events?per_page=100"
                       console.log(URL);
                       var m;
                       let retvalue = await githubdata("extract",URL,handle)
@@ -378,13 +378,14 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                                         let flag=0;
                                         for (b in retvalue) {
                                               if(retvalue[b].created_at.split('-')[1] == '10'){
-                                                    if(retvalue[b].type == 'PullRequestEvent'){ 
+                                                    if(retvalue[b].type == 'PullRequestEvent'){
+														if(retvalue[b].payload.action=='opened'&&retvalue[b].payload.pull_request.user.login==handle){ 
                                                         streak++;
                                                         if(flag == 0){console.log(streak); flag++;last=retvalue[b].id;}                                          //For storing the value of last variable.
                                                         repo = retvalue[b].payload.pull_request.html_url;
                                                         name = retvalue[b].payload.pull_request.title;
-                                                        channelupdates.send(handle+" made a pull request **"+name+"** at "+repo);   
-                                                    }    
+                                                        channelupdates.send(handle+" opened a pull request **"+name+"** at "+repo);
+                                                    }}    
                                               }
                                               else { 
                                                    break;
@@ -402,18 +403,19 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                                        for (b in retvalue){
                                                if(retvalue[b].created_at.split('-')[1] == '10'){
                                                          if(retvalue[b].type == 'PullRequestEvent'){
+															if(retvalue[b].payload.action=='opened'&&retvalue[b].payload.pull_request.user.login==handle){
                                                               if(retvalue[b].id != last){  
                                                                 streak++;
                                                                 console.log(streak);
                                                                 if(flag == 0){console.log(streak); flag++;newlast=retvalue[b].id;}
                                                                 repo = retvalue[b].payload.pull_request.html_url;
                                                                 name = retvalue[b].payload.pull_request.title;
-                                                                channelupdates.send(handle+" made a pull request **"+name+"** at "+repo); 
+                                                                channelupdates.send(handle+" opened a pull request **"+name+"** at "+repo); 
                                                                 }
                                                               else{
                                                                 break;
                                                                 }
-                                                         }
+                                                        }}
                                                 }           
                                                 else{
                                                     break;
