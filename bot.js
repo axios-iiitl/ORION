@@ -269,6 +269,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                       let URL="https://codeforces.com/api/user.rating?handle="+handle
                       console.log(URL);
                       for ( m in newID ){
+					  console.log(newID[m]);	  
                       let retvalue = await getdata("extract",URL,handle,newID[m])
                       console.log(retvalue);
                       if(retvalue == "increase"){
@@ -288,7 +289,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
                                   }
                                 }                   
                     }
-                    await collection2.updateOne({imp: "1"},{ '$set' : { 'contest' : newID[m] }});
+                    await collection2.updateOne({imp: "1"},{ '$set' : { 'contest' : newID[0] }});
                   }               
               }
          }
@@ -438,7 +439,7 @@ async function database(message,query1='NULL',query2='NULL',query3='NULL',query4
 /////////////////////////////////////////////////////////////////////////DATABASE FUNCTION ENDS////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const j = schedule.scheduleJob({hour: 20, minute: 30}, () => {                                        //Update data in leaderboard
+const j = schedule.scheduleJob({hour: 19, minute: 22}, () => {                                        //Update data in leaderboard
      database("null","leaderboard");
 });
 
