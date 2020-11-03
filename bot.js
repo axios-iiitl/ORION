@@ -443,12 +443,12 @@ const j = schedule.scheduleJob({hour: 20, minute: 30}, () => {                  
      database("null","leaderboard");
 });
 
-setInterval(database,300000,"null","hacktober");
+//setInterval(database,300000,"null","hacktober");
 
 async function show(){
 	database("null","show","cf");
 	await new Promise(resolve => setTimeout(resolve, 120000));                                        //Wait 2 min
-    database("null","show","hacktober");
+        //database("null","show","hacktober");
 }
 
 
